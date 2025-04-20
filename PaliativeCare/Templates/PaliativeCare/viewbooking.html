@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bookings Dashboard</title>
+    <!-- Include Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        .card-hover {
+            transition: all 0.3s ease-in-out;
+        }
+
+        .card-hover:hover {
+            transform: translateY(-8px) scale(1.02);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+        }
+
+        .gradient-bg {
+            background: linear-gradient(135deg, #6EE7B7 0%, #3B82F6 100%);
+        }
+
+        .status-badge {
+            padding: 0.25rem 0.75rem;
+            border-radius: 9999px;
+            font-size: 0.75rem;
+            font-weight: 500;
+        }
+
+        .container-shadow {
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        }
+
+        .button {
+            background-color: #3077c9;
+            /* Green background */
+            border: none;
+            color: white;
+            padding: 10px 30px;
+            text-align: center !important;
+            justify-content: center !important;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            cursor: pointer;
+            border-radius: 20px;
+        }
+
+        .button:hover {
+            background-color: #45a049;
+            /* Darker green on hover */
+            transition: background-color 0.3s ease;
+        }
+
+        /* Shadow Effect */
+        .shadow-btn {
+            background-color: #ff9800;
+            color: white;
+            padding: 12px 24px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        }
+
+        .shadow-btn:hover {
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+            transform: translateY(-2px);
+        }
+
+        /* Gradient Button */
+        .gradient-btn {
+            background: linear-gradient(45deg, #2196F3, #21CBF3);
+            color: white;
+            padding: 12px 24px;
+            border: none;
+        }
+
+        a {
+            background-color: #007bff;
+            color: #fff !important;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            width: 100%;
+            transition: background-color 0.3s ease;
+        }
+
+        a:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+
+<body class="bg-gradient-to-br from-gray-50 to-gray-100 min-h-screen p-6">
+    <a href="{% url 'PaliativeCare:homepage' %}">Home</a>
+    <div class="container mx-auto max-w-7xl container-shadow bg-white rounded-2xl p-8">
+        <div class="flex items-center justify-between mb-8">
+            <h1 class="text-4xl font-extrabold text-gray-900 bg-clip-text">Bookings Dashboard</h1>
+            <div class="flex items-center gap-4">
+                <span class="text-sm text-gray-600">Total: {{ book|length }}</span>
+
+            </div>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            {% for i in book %}
+            <div class="card-hover bg-white rounded-xl overflow-hidden border border-gray-100">
+                <!-- Card Header -->
+                <div class="gradient-bg p-5 relative">
+                    <h2 class="text-xl font-semibold text-white">Booking #{{ forloop.counter }}</h2>
+                    <p class="text-sm text-white/90 mt-1">{{ i.request_date }}</p>
+                    <span class="absolute top-4 right-4 status-badge 
+                        {% if i.request_status == 1 %}bg-green-100 text-green-800
+                        {% elif i.request_status == 2 %}bg-red-100 text-red-800
+                        {% elif i.request_status == 3 %}bg-yellow-100 text-yellow-800
+                        {% else %}bg-yellow-100 text-yellow-800{% endif %}">
+                        {% if i.request_status == 1 %}Accepted
+                        {% elif i.request_status == 2 %}Rejected
+                        {% elif i.request_status == 3 %}Payment Completed
+                        {% else %}Pending{% endif %}
+                    </span>
+                </div>
+
+                <!-- Card Body -->
+                <div class="p-6 space-y-5">
+                    <div class="grid grid-cols-2 gap-4">
+                        <div>
+                            <span class="text-xs font-medium text-gray-500 uppercase tracking-wide">From</span>
+                            <p class="text-gray-900 font-medium">{{ i.request_fromdate }}</p>
+                        </div>
+                        <div>
+                            <span class="text-xs font-medium text-gray-500 uppercase tracking-wide">To</span>
+                            <p class="text-gray-900 font-medium">{{ i.request_todate }}</p>
+                        </div>
+                    </div>
+                    
+                    <div>
+                        <span class="text-xs font-medium text-gray-500 uppercase tracking-wide">Amount</span>
+                        <p class="text-lg text-gray-900 font-semibold">
+                            {% if i.request_amount == "" %}
+                            <span class="text-gray-400">N/A</span>
+                            {% else %}
+                            ${{ i.request_amount }}
+                            {% endif %}
+                        </p>
+                    </div>
+
+                    <div>
+                        <span class="text-xs font-medium text-gray-500 uppercase tracking-wide">Description</span>
+                        <p class="text-gray-700 text-sm line-clamp-2">{{ i.request_description }}</p>
+                    </div>
+
+                    <div>
+                        <span class="text-xs font-medium text-gray-500 uppercase tracking-wide">Patient</span>
+                        <p class="text-gray-900 font-medium">{{ i.patient_id.patient_name }}</p>
+                    </div>
+                    {% if i.request_team != "" %}
+                    <div>
+                        <span class="text-xs font-medium text-gray-500 uppercase tracking-wide">Team</span>
+                        <p class="text-gray-900 font-medium">{{ i.request_team }}</p>
+                    </div>
+                    {% endif %}                    
+                    <!-- Card Footer -->
+                {% if i.request_status == 1 %}
+                <div class="bg-gray-50 px-6 py-4 flex justify-end gap-3 border-t">
+                    <p class="text-gray-600">Request Accepted</p>
+                </div>                
+                {% elif i.request_status == 2 %}
+                <div class="bg-gray-50 px-6 py-4 flex justify-end gap-3 border-t">
+                    <p class="text-gray-600">Request Rejected</p>
+                </div>
+                {%  elif i.request_status == 3 %}
+                <div class="bg-gray-50 px-6 py-4 flex justify-end gap-3 border-t">
+                    <p class="text-gray-600">Payment Completed</p>
+                </div>
+                {% else %}
+                <div class="bg-gray-50 px-6 py-4 flex justify-end gap-3 border-t">
+                    <a href="{% url 'PaliativeCare:addamount' i.id %}" 
+                       class="bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-600 transition-all duration-200 shadow-sm hover:shadow-md">
+                        Accept
+                    </a>
+                    <a href="{% url 'PaliativeCare:rejectrequest' i.id %}" 
+                       class="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600 transition-all duration-200 shadow-sm hover:shadow-md">
+                        Reject
+                    </a>
+                </div>
+                {% endif %}
+                </div>
+
+                <!-- Card Footer -->
+
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+    {% if msg %}
+    <script>
+        alert("{{ msg }}")
+        window.location = "{% url 'PaliativeCare:viewbooking' %}"
+    </script>
+    {% endif %}
+</body>
+
+</html>

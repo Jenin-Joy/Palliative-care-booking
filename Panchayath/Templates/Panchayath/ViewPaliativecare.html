@@ -1,0 +1,219 @@
+{% extends 'Panchayath/Head.html' %}
+{% block content %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Verify Palliative Care</title>
+    <style>
+        /* General Reset */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        /* Body Styling */
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f4f7fa;
+            color: #333;
+        }
+
+        /* Table Styling */
+        table[border="1"] {
+            width: 100%;
+            max-width: 1200px;
+            margin: 20px auto;
+            border-collapse: collapse;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+
+        th, td {
+            padding: 12px;
+            border: 1px solid #ddd;
+            text-align: left;
+            font-size: 14px;
+        }
+
+        th {
+            background-color: #007bff;
+            color: #fff;
+            font-weight: bold;
+            text-transform: uppercase;
+        }
+
+        tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+
+        tr:hover {
+            background-color: #f1f1f1;
+        }
+
+        /* Image Styling */
+        img {
+            width: 150px;
+            height: 100px;
+            border-radius: 4px;
+            object-fit: cover;
+        }
+
+        /* Action Links */
+        a {
+            text-decoration: none;
+            font-weight: 500;
+            padding: 5px 10px;
+            border-radius: 4px;
+            transition: color 0.3s ease;
+            display: inline-block;
+        }
+
+        a[href*="verifypaliativecare"][href*="1"] {
+            color: #28a745;
+        }
+
+        a[href*="verifypaliativecare"][href*="1"]:hover {
+            color: #1e7e34;
+        }
+
+        a[href*="verifypaliativecare"][href*="2"] {
+            color: #dc3545;
+        }
+
+        a[href*="verifypaliativecare"][href*="2"]:hover {
+            color: #a71d2a;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 800px) {
+            table[border="1"] {
+                width: 100%;
+                display: block;
+                overflow-x: auto;
+            }
+
+            th, td {
+                font-size: 12px;
+                padding: 8px;
+            }
+
+            img {
+                width: 120px;
+                height: 80px;
+            }
+        }
+
+        @media (max-width: 600px) {
+            th, td {
+                font-size: 10px;
+                padding: 6px;
+            }
+
+            img {
+                width: 100px;
+                height: 60px;
+            }
+
+            a {
+                font-size: 12px;
+                padding: 3px 6px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <table border="1" align="center">
+        <tr>
+            <th>SI NO</th>
+            <th>NAME</th>
+            <th>EMAIL</th>
+            <th>CONTACT</th>
+            <th>ADDRESS</th>
+            <th>PLACE</th>
+            <th>PHOTO</th>
+            <th>PROOF</th>
+            <th>ACTION</th>
+        </tr>
+        {% for i in newpaliativecare %}
+        <tr>
+            <td>{{ forloop.counter }}</td>
+            <td>{{ i.paliativecare_name }}</td>
+            <td>{{ i.paliativecare_email }}</td>
+            <td>{{ i.paliativecare_contact }}</td>
+            <td>{{ i.paliativecare_address }}</td>
+            <td>{{ i.panchayath.place.place_name }}</td>
+            <td><img src="{{ i.paliativecare_photo.url }}" width="150" height="100" alt="Photo"></td>
+            <td><img src="{{ i.paliativecare_proof.url }}" width="150" height="100" alt="Proof"></td>
+            <td>
+                <a href="{% url 'Panchayath:verifypaliativecare' i.id 1 %}">Accept</a>
+                <a href="{% url 'Panchayath:verifypaliativecare' i.id 2 %}">Reject</a>
+            </td>
+        </tr>
+        {% endfor %}
+    </table>
+
+    <table border="1" align="center">
+        <tr>
+            <th>SI NO</th>
+            <th>NAME</th>
+            <th>EMAIL</th>
+            <th>CONTACT</th>
+            <th>ADDRESS</th>
+            <th>PLACE</th>
+            <th>PHOTO</th>
+            <th>PROOF</th>
+            <th>ACTION</th>
+        </tr>
+        {% for i in acceptedpaliativecare %}
+        <tr>
+            <td>{{ forloop.counter }}</td>
+            <td>{{ i.paliativecare_name }}</td>
+            <td>{{ i.paliativecare_email }}</td>
+            <td>{{ i.paliativecare_contact }}</td>
+            <td>{{ i.paliativecare_address }}</td>
+            <td>{{ i.panchayath.place.place_name }}</td>
+            <td><img src="{{ i.paliativecare_photo.url }}" width="150" height="100" alt="Photo"></td>
+            <td><img src="{{ i.paliativecare_proof.url }}" width="150" height="100" alt="Proof"></td>
+            <td>
+                <a href="{% url 'Panchayath:verifypaliativecare' i.id 2 %}">Reject</a>
+            </td>
+        </tr>
+        {% endfor %}
+    </table>
+
+    <table border="1" align="center">
+        <tr>
+            <th>SI NO</th>
+            <th>NAME</th>
+            <th>EMAIL</th>
+            <th>CONTACT</th>
+            <th>ADDRESS</th>
+            <th>PLACE</th>
+            <th>PHOTO</th>
+            <th>PROOF</th>
+            <th>ACTION</th>
+        </tr>
+        {% for i in rejectedpaliativecare %}
+        <tr>
+            <td>{{ forloop.counter }}</td>
+            <td>{{ i.paliativecare_name }}</td>
+            <td>{{ i.paliativecare_email }}</td>
+            <td>{{ i.paliativecare_contact }}</td>
+            <td>{{ i.paliativecare_address }}</td>
+            <td>{{ i.panchayath.place.place_name }}</td>
+            <td><img src="{{ i.paliativecare_photo.url }}" width="150" height="100" alt="Photo"></td>
+            <td><img src="{{ i.paliativecare_proof.url }}" width="150" height="100" alt="Proof"></td>
+            <td>
+                <a href="{% url 'Panchayath:verifypaliativecare' i.id 1 %}">Accept</a>
+            </td>
+        </tr>
+        {% endfor %}
+    </table>
+</body>
+</html>
+{% endblock content %}

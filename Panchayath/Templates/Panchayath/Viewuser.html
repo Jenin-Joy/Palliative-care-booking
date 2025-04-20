@@ -1,0 +1,144 @@
+{% extends 'Panchayath/Head.html' %}
+{% block content %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>View Users</title>
+    <style>
+        /* General Reset */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        /* Body Styling */
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f4f7fa;
+            color: #333;
+        }
+
+        /* Heading Styling */
+        h3 {
+            text-align: center;
+            margin: 20px 0;
+            color: #007bff;
+            font-size: 24px;
+            font-weight: bold;
+        }
+
+        /* Form Styling */
+        form {
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        /* Table Styling */
+        table[border="1"] {
+            width: 100%;
+            border-collapse: collapse;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+
+        th, td {
+            padding: 12px;
+            border: 1px solid #ddd;
+            text-align: left;
+            font-size: 14px;
+        }
+
+        th {
+            background-color: #007bff;
+            color: #fff;
+            font-weight: bold;
+            text-transform: uppercase;
+        }
+
+        tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+
+        tr:hover {
+            background-color: #f1f1f1;
+        }
+
+        /* Image Styling */
+        img {
+            width: 150px;
+            height: 100px;
+            border-radius: 4px;
+            object-fit: cover;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 800px) {
+            table[border="1"] {
+                width: 100%;
+                display: block;
+                overflow-x: auto;
+            }
+
+            th, td {
+                font-size: 12px;
+                padding: 8px;
+            }
+
+            img {
+                width: 120px;
+                height: 80px;
+            }
+        }
+
+        @media (max-width: 600px) {
+            h3 {
+                font-size: 20px;
+            }
+
+            th, td {
+                font-size: 10px;
+                padding: 6px;
+            }
+
+            img {
+                width: 100px;
+                height: 60px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <form method="post">
+        {% csrf_token %}
+        <h3>User</h3>
+        <table border="1">
+            <tr>
+                <th>Sl</th>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Contact</th>
+                <th>Address</th>
+                <th>Photo</th>
+                <th>Ward</th>
+            </tr>
+            {% for i in user %}
+            <tr>
+                <td>{{ forloop.counter }}</td>
+                <td>{{ i.user_name }}</td>
+                <td>{{ i.user_email }}</td>
+                <td>{{ i.user_contact }}</td>
+                <td>{{ i.user_address }}</td>
+                <td><img src="{{ i.user_photo.url }}" width="150" height="100" alt="User Photo"></td>
+                <td>{{ i.ward.ward.ward_number }}</td>
+            </tr>
+            {% endfor %}
+        </table>
+    </form>
+</body>
+</html>
+{% endblock content %}

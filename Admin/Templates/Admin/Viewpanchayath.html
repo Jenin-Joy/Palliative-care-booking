@@ -1,0 +1,247 @@
+{% extends 'Admin/Head.html' %}
+{% block content %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Panchayath Management</title>
+    <style>
+        /* General Reset */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        /* Body Styling */
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f4f7fa;
+            color: #333;
+        }
+
+        /* Headings */
+        h3 {
+            text-align: center;
+            margin: 20px 0;
+            color: #007bff;
+            font-size: 24px;
+            font-weight: bold;
+        }
+
+        /* Form Styling */
+        form {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        /* Table Styling */
+        table[border="1"] {
+            width: 100%;
+            border-collapse: collapse;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            margin: 20px auto;
+            overflow: hidden;
+        }
+
+        th, td {
+            padding: 12px;
+            border: 1px solid #ddd;
+            text-align: left;
+            font-size: 14px;
+        }
+
+        th {
+            background-color: #007bff;
+            color: #fff;
+            font-weight: bold;
+            text-transform: uppercase;
+        }
+
+        tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+
+        tr:hover {
+            background-color: #f1f1f1;
+        }
+
+        /* Image Styling */
+        img {
+            width: 100px;
+            height: auto;
+            border-radius: 4px;
+            object-fit: cover;
+        }
+
+        /* Action Links */
+        a {
+            text-decoration: none;
+            font-weight: 500;
+            padding: 5px 10px;
+            border-radius: 4px;
+            transition: color 0.3s ease;
+            display: inline-block;
+        }
+
+        a[href*="viewpanchayathaccept"] {
+            color: #28a745;
+        }
+
+        a[href*="viewpanchayathaccept"]:hover {
+            color: #1e7e34;
+        }
+
+        a[href*="viewpanchayathreject"] {
+            color: #dc3545;
+        }
+
+        a[href*="viewpanchayathreject"]:hover {
+            color: #a71d2a;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 800px) {
+            table[border="1"] {
+                width: 100%;
+                display: block;
+                overflow-x: auto;
+            }
+
+            th, td {
+                font-size: 12px;
+                padding: 8px;
+            }
+
+            img {
+                width: 80px;
+            }
+        }
+
+        @media (max-width: 600px) {
+            h3 {
+                font-size: 20px;
+            }
+
+            th, td {
+                font-size: 10px;
+                padding: 6px;
+            }
+
+            img {
+                width: 60px;
+            }
+
+            a {
+                font-size: 12px;
+                padding: 3px 6px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <form method="post">
+        {% csrf_token %}
+        <h3 align="center">New Panchayath</h3>
+        <table border="1" align="center">
+            <tr>
+                <th>SI</th>
+                <th>NAME</th>
+                <th>EMAIL</th>
+                <th>CONTACT</th>
+                <th>ADDRESS</th>
+                <th>PLACE</th>
+                <th>PHOTO</th>
+                <th>PROOF</th>
+                <th>ACTION</th>
+            </tr>
+            {% for i in result %}
+            <tr>
+                <td>{{ forloop.counter }}</td>
+                <td>{{ i.panchayath_name }}</td>
+                <td>{{ i.panchayath_email }}</td>
+                <td>{{ i.panchayath_contact }}</td>
+                <td>{{ i.panchayath_address }}</td>
+                <td>{{ i.place.place_name }}</td>
+                <td><img src="{{ i.panchayath_photo.url }}" alt="Panchayath Photo" style="width:100px;height: auto;"></td>
+                <td><img src="{{ i.panchayath_proof.url }}" alt="Panchayath Proof" style="width:100px;height: auto;"></td>
+                <td>
+                    <a href="{% url 'Admin:viewpanchayathaccept' i.id %}">Accept</a><br><br>
+                    <a href="{% url 'Admin:viewpanchayathreject' i.id %}">Reject</a>
+                </td>
+            </tr>
+            {% endfor %}
+        </table>
+        <br>
+        <h3 align="center">Accepted List</h3>
+        <table border="1" align="center">
+            <tr>
+                <th>SI</th>
+                <th>NAME</th>
+                <th>EMAIL</th>
+                <th>CONTACT</th>
+                <th>ADDRESS</th>
+                <th>PLACE</th>
+                <th>PHOTO</th>
+                <th>PROOF</th>
+                <th>ACTION</th>
+            </tr>
+            {% for i in accept %}
+            <tr>
+                <td>{{ forloop.counter }}</td>
+                <td>{{ i.panchayath_name }}</td>
+                <td>{{ i.panchayath_email }}</td>
+                <td>{{ i.panchayath_contact }}</td>
+                <td>{{ i.panchayath_address }}</td>
+                <td>{{ i.place.place_name }}</td>
+                <td><img src="{{ i.panchayath_photo.url }}" alt="Panchayath Photo" style="width:100px;height: auto;"></td>
+                <td><img src="{{ i.panchayath_proof.url }}" alt="Panchayath Proof" style="width:100px;height: auto;"></td>
+                <td>
+                    <a href="{% url 'Admin:viewpanchayathreject' i.id %}">Reject</a>
+                </td>
+            </tr>
+            {% endfor %}
+        </table>
+        <br>
+        <h3 align="center">Rejected Panchayath</h3>
+        <table border="1" align="center">
+            <tr>
+                <th>SI</th>
+                <th>NAME</th>
+                <th>EMAIL</th>
+                <th>CONTACT</th>
+                <th>ADDRESS</th>
+                <th>PLACE</th>
+                <th>PHOTO</th>
+                <th>PROOF</th>
+                <th>ACTION</th>
+            </tr>
+            {% for i in reject %}
+            <tr>
+                <td>{{ forloop.counter }}</td>
+                <td>{{ i.panchayath_name }}</td>
+                <td>{{ i.panchayath_email }}</td>
+                <td>{{ i.panchayath_contact }}</td>
+                <td>{{ i.panchayath_address }}</td>
+                <td>{{ i.place.place_name }}</td>
+                <td><img src="{{ i.panchayath_photo.url }}" alt="Panchayath Photo" style="width:100px;height: auto;"></td>
+                <td><img src="{{ i.panchayath_proof.url }}" alt="Panchayath Proof" style="width:100px;height: auto;"></td>
+                <td>
+                    <a href="{% url 'Admin:viewpanchayathaccept' i.id %}">Accept</a>
+                </td>
+            </tr>
+            {% endfor %}
+        </table>
+    </form>
+</body>
+</html>
+{% if msg %}
+<script>
+    alert("{{ msg }}")
+    window.location="{% url 'Admin:Viewpanchayath' %}"
+</script>
+{% endif %}
+{% endblock content %}

@@ -1,0 +1,5 @@
+<option value="">...Select...</option>
+
+{% for i in ward %}
+<option value="{{ i.id }}">{{ i.ward.ward_number }}</option>
+{% endfor %}

@@ -1,0 +1,199 @@
+{% extends 'User/Head.html' %}
+{% block content %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>View Palliative Care</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" integrity="sha512-Kc323vGBEqzTmouAECnVceyQqyqdsSiqLQISBL29aUW4U/M7pSPA/gEUZQqv1cwx4OnYxTxve5UMg5GT6L4JJg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <style>
+        /* General Reset */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        /* Body Styling */
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f4f7fa;
+            color: #333;
+        }
+
+        /* Heading Styling */
+        h3 {
+            color: #007bff;
+            font-weight: bold;
+            text-align: center;
+            margin: 20px 0;
+        }
+
+        /* Form Styling */
+        form {
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        /* Table Styling */
+        table[border="1"] {
+            width: 100%;
+            border-collapse: collapse;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+
+        th, td {
+            padding: 12px;
+            border: 1px solid #ddd;
+            text-align: left;
+            font-size: 14px;
+        }
+
+        th {
+            background-color: #007bff;
+            color: #fff;
+            font-weight: bold;
+            text-transform: uppercase;
+        }
+
+        tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+
+        tr:hover {
+            background-color: #f1f1f1;
+        }
+
+        /* Image Styling */
+        img {
+            width: 100px;
+            height: auto;
+            border-radius: 4px;
+            object-fit: cover;
+        }
+
+        /* Star Rating Styling */
+        .text-warning {
+            color: #ffc107 !important; /* Bootstrap's warning color for filled stars */
+        }
+
+        .star-light {
+            color: #ccc; /* Light gray for empty stars */
+        }
+
+        .fa-star {
+            font-size: 16px;
+            margin-right: 2px;
+        }
+
+        /* Action Link Styling */
+        a {
+            text-decoration: none;
+            color: #007bff;
+            font-weight: 500;
+            padding: 5px 10px;
+            border-radius: 4px;
+            transition: color 0.3s ease, background-color 0.3s ease;
+        }
+
+        a:hover {
+            color: #0056b3;
+            background-color: #e9ecef;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 800px) {
+            table[border="1"] {
+                display: block;
+                overflow-x: auto;
+            }
+
+            th, td {
+                font-size: 12px;
+                padding: 8px;
+            }
+
+            img {
+                width: 80px;
+            }
+
+            .fa-star {
+                font-size: 14px;
+            }
+
+            a {
+                font-size: 12px;
+                padding: 3px 6px;
+            }
+        }
+
+        @media (max-width: 600px) {
+            h3 {
+                font-size: 1.25rem;
+            }
+
+            th, td {
+                font-size: 10px;
+                padding: 6px;
+            }
+
+            img {
+                width: 60px;
+            }
+
+            .fa-star {
+                font-size: 12px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <form method="post">
+        {% csrf_token %}
+        <h3 align="center">Paliativecare</h3>
+        <table border="1" align="center">
+            <tr>
+                <th>SI</th>
+                <th>NAME</th>
+                <th>EMAIL</th>
+                <th>CONTACT</th>
+                <th>ADDRESS</th>
+                <th>PHOTO</th>
+                <th>RATING</th>
+                <th>ACTION</th>
+            </tr>
+            {% for i,j in result %}
+            <tr>
+                <td>{{ forloop.counter }}</td>
+                <td>{{ i.paliativecare_name }}</td>
+                <td>{{ i.paliativecare_email }}</td>
+                <td>{{ i.paliativecare_contact }}</td>
+                <td>{{ i.paliativecare_address }}</td>
+                <td><img src="{{ i.paliativecare_photo.url }}" alt="Photo" style="width:100px;height: auto;"></td>
+                <td>
+                    {% for k in ar %} 
+                    {% if k <= j %}
+                    <i class="fa-solid fa-star text-warning"></i>
+                    {% else %}
+                    <i class="fa-solid fa-star star-light"></i>
+                    {% endif %}
+                    {% endfor %}
+                </td>
+                <td><a href="{% url 'User:sendrequest' i.id pid %}">Send Request</a></td>
+            </tr>
+            {% endfor %}
+        </table>
+    </form>
+    {% if msg %}
+    <script>
+        alert("{{ msg }}")
+        window.location="{% url 'User:ViewPaliativecare' %}"
+    </script>
+    {% endif %}
+</body>
+</html>
+{% endblock content %}

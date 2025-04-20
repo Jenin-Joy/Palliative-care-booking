@@ -1,0 +1,158 @@
+{% extends 'Paliativecare/Head.html' %}
+{% block content %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Palliative Care Profile</title>
+    <style>
+        /* General Reset */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        /* Body Styling */
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f4f7fa;
+            color: #333;
+        }
+
+        /* Table Styling */
+        table[border="=1"] {
+            width: 100%;
+            max-width: 500px;
+            margin: 0 auto;
+            border-collapse: collapse;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+
+        td {
+            padding: 12px;
+            border: 1px solid #ddd;
+            text-align: left;
+            font-size: 14px;
+        }
+
+        td:first-child {
+            font-weight: bold;
+            color: #007bff;
+            width: 30%;
+        }
+
+        /* Image Styling */
+        img {
+            width: 100px;
+            height: auto;
+            border-radius: 50%;
+            object-fit: cover;
+            display: block;
+            margin: 0 auto;
+        }
+
+        td[colspan="2"][align="center"] {
+            text-align: center;
+            padding: 20px;
+        }
+
+        /* Action Links */
+        a {
+            text-decoration: none;
+            color: #007bff;
+            font-weight: 500;
+            padding: 5px 10px;
+            border-radius: 4px;
+            transition: color 0.3s ease, background-color 0.3s ease;
+            margin: 0 10px;
+        }
+
+        a:hover {
+            color: #0056b3;
+            background-color: #e9ecef;
+        }
+
+        td[colspan="2"]:last-child {
+            text-align: center;
+            padding: 15px;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 600px) {
+            table[border="=1"] {
+                width: 100%;
+            }
+
+            td {
+                font-size: 12px;
+                padding: 8px;
+            }
+
+            img {
+                width: 80px;
+            }
+
+            a {
+                font-size: 12px;
+                padding: 3px 6px;
+                margin: 5px;
+                display: inline-block;
+            }
+        }
+    </style>
+</head>
+<body>
+    <form>
+        {% csrf_token %}
+        <table border="=1">
+            <tr>
+                <td colspan="2" align="center">
+                    <img src="{{ paliativecare.paliativecare_photo.url }}" alt="User Photo" style="width: 100px; height: auto;">
+                </td>
+            </tr>
+            <tr>
+                <td>Name</td>
+                <td>{{ paliativecare.paliativecare_name }}</td>
+            </tr>
+            <tr>
+                <td>Email</td>
+                <td>{{ paliativecare.paliativecare_email }}</td>
+            </tr>
+            <tr>
+                <td>Contact</td>
+                <td>{{ paliativecare.paliativecare_contact }}</td>
+            </tr>
+            <tr>
+                <td>Address</td>
+                <td>{{ paliativecare.paliativecare_address }}</td>
+            </tr>
+            <tr>
+                <td>District</td>
+                <td>{{ paliativecare.panchayath.place.district.district_name }}</td>
+            </tr>
+            <tr>
+                <td>Place</td>
+                <td>{{ paliativecare.panchayath.place.place_name }}</td>
+            </tr>
+            <tr>
+                <td colspan="2">
+                    <a href="{% url 'PaliativeCare:EditProfile' %}">Edit Profile</a>
+                    <a href="{% url 'PaliativeCare:changepassword' %}">Change Password</a>
+                </td>
+            </tr>
+        </table>
+    </form>
+    {% if msg %}
+    <script>
+        alert("{{ msg }}")
+        window.location = "{% url 'PaliativeCare:profile' %}"
+    </script>
+    {% endif %}
+</body>
+</html>
+{% endblock content %}

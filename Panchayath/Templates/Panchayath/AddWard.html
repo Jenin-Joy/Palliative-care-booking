@@ -1,0 +1,161 @@
+{% extends 'Panchayath/Head.html' %}
+{% block content %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ward Management</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f7fa;
+            margin: 0;
+            
+        }
+
+        form {
+            background-color: #ffffff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 600px;
+            margin-bottom: 30px;
+        }
+
+        .checkbox-group {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .checkbox-group input[type="checkbox"] {
+            margin-right: 8px;
+            accent-color: #4a90e2;
+        }
+
+        .checkbox-group label {
+            font-size: 16px;
+            color: #333;
+            cursor: pointer;
+        }
+
+        input[type="submit"] {
+            background-color: #4a90e2;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s ease;
+        }
+
+        input[type="submit"]:hover {
+            background-color: #357abd;
+        }
+
+        table {
+            width: 100%;
+            max-width: 600px;
+            border-collapse: collapse;
+            background-color: #ffffff;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        th, td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #e5e7eb;
+        }
+
+        th {
+            background-color: #4a90e2;
+            color: white;
+            font-weight: bold;
+        }
+
+        td {
+            color: #333;
+        }
+
+        tr:last-child td {
+            border-bottom: none;
+        }
+
+        a {
+            color: #e53e3e;
+           :mt-10 text-decoration: none;
+            font-weight: bold;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+
+        @media (max-width: 600px) {
+            form, table {
+                width: 90%;
+            }
+
+            th, td {
+                font-size: 14px;
+                padding: 10px;
+            }
+
+            .checkbox-group {
+                flex-direction: column;
+                gap: 10px;
+            }
+        }
+        .cont{
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+    </style>
+</head>
+<body>
+    <div class="cont">    
+    <form action="" method="post">
+        {% csrf_token %}
+        <div class="checkbox-group">
+            {% for i in ward %}
+            <div>
+                <input type="checkbox" name="txt_ward[]" value="{{i.id}}" id="txt_ward{{forloop.counter}}">
+                <label for="txt_ward{{forloop.counter}}">{{i.ward_number}}</label>
+            </div>
+            {% endfor %}
+        </div>
+        <input type="submit" value="Submit">
+    </form>
+     
+
+    <table>
+        <tr>
+            <th>SI</th>
+            <th>Ward</th>
+            <th>Action</th>
+        </tr>
+        {% for i in panchayathward %}
+        <tr>
+            <td>{{forloop.counter}}</td>
+            <td>{{i.ward.ward_number}}</td>
+            <td><a href="{% url 'Panchayath:delward' i.id %}">Delete</a></td>
+        </tr>
+        {% endfor %}
+    </table>
+</div>    
+    {% if msg %}
+    <script>
+        alert("{{msg}}")
+        window.location="{% url 'Panchayath:addward' %}"
+    </script>
+    {% endif %}
+</body>
+</html>
+{% endblock content %}

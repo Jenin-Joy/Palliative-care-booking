@@ -1,0 +1,5 @@
+<option value="">...Select...</option>
+
+{% for i in panchayath %}
+<option value="{{ i.id }}">{{ i.panchayath_name }}</option>
+{% endfor %}
